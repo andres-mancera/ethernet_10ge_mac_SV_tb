@@ -425,7 +425,7 @@ task ProcessCmdFile;
   reg [8*8-1:0] str;
     begin
 
-        file_cmd = $fopen("../../testbench/verilog/packets_tx.txt", "r");
+        file_cmd = $fopen("../testbench/verilog/packets_tx.txt", "r");
         if (!file_cmd) $stop;
 
         while (!$feof(file_cmd)) begin
