@@ -1,0 +1,6 @@
+vcs -full64 +vcs+lic+wait -sverilog -R -l vcs.log -debug_pp \
+-override_timescale=1ps/1ps     \
++incdir+../rtl/include          \
+../rtl/verilog/*.v              \
+../testcases/testcase.sv        \
+../testbench/testbench.sv
