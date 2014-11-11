@@ -15,9 +15,12 @@ module testbench();
   logic [31:0]  wb_dat_o;
   logic [7:0]   xgmii_txc;
 
-  initial begin
-    $vcdpluson;     // Enable waveform dumping
-  end
+  //-----------------------------------------------------------------
+  // In order to enable waveform dumping, either uncomment the system
+  // call below or use the +vcs+vcdpluson vcs command line option.
+  //initial begin
+  //  $vcdpluson;     // Enable waveform dumping
+  //end
 
   // Generate free running clocks
   initial begin
