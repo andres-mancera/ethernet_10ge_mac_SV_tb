@@ -1,6 +1,6 @@
 module testbench();
 
-  bit           clk_156m25, clk_xgmii_rx, clk_xgmii_tx;
+  logic         clk_156m25, clk_xgmii_rx, clk_xgmii_tx;
   logic         reset_156m25_n, reset_xgmii_rx_n, reset_xgmii_tx_n;
   logic         pkt_rx_ren, pkt_tx_eop, pkt_tx_sop, pkt_tx_val; 
   logic         wb_clk_i, wb_cyc_i, wb_rst_i, wb_stb_i, wb_we_i;
