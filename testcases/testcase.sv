@@ -11,23 +11,23 @@ program testcase (  interface tcif  );
     rx_count = 0;
     
     tcif.cb.wb_adr_i    <= 8'b0;
-    tcif.cb.wb_clk_i    <= 1'b0;
     tcif.cb.wb_cyc_i    <= 1'b0;
     tcif.cb.wb_dat_i    <= 32'b0;
-    tcif.cb.wb_rst_i    <= 1'b1;
     tcif.cb.wb_stb_i    <= 1'b0;
     tcif.cb.wb_we_i     <= 1'b0;
   end
 
   // Reset generation
   initial begin
-    tcif.cb.reset_156m25_n <= 1'b0;
+    tcif.cb.reset_156m25_n   <= 1'b0;
     tcif.cb.reset_xgmii_rx_n <= 1'b0;
     tcif.cb.reset_xgmii_tx_n <= 1'b0;
+    tcif.cb.wb_rst_i         <= 1'b1;
     WaitNS(20);
-    tcif.cb.reset_156m25_n <= 1'b1;
+    tcif.cb.reset_156m25_n   <= 1'b1;
     tcif.cb.reset_xgmii_rx_n <= 1'b1;
     tcif.cb.reset_xgmii_tx_n <= 1'b1;
+    tcif.cb.wb_rst_i         <= 1'b0;
   end
 
   // Init signals
@@ -43,6 +43,35 @@ program testcase (  interface tcif  );
     tcif.cb.pkt_tx_mod <= 3'b0;
   end
 
+  //==========================================================
+  // Wishbone interface read/write
+  initial begin
+    WaitNS(1000);
+    // Initial read to configuration register 0.
+    tcif.cb.wb_adr_i    <= 8'b0;
+    tcif.cb.wb_cyc_i    <= 1'b1;
+    tcif.cb.wb_stb_i    <= 1'b1;
+    WaitNS(10);
+    tcif.cb.wb_cyc_i    <= 1'b0;
+    tcif.cb.wb_stb_i    <= 1'b0;
+    WaitNS(100);
+
+    // Write into configuration register 0 (Address 0x00).
+    // As long as wb_dat_i[0]=1'b1, transmission will be enabled.
+    // The remaining bits (wb_dat_i[31:1]) are don't care.
+    tcif.cb.wb_adr_i    <= 8'b0;
+    tcif.cb.wb_cyc_i    <= 1'b1;
+    tcif.cb.wb_stb_i    <= 1'b1;
+    tcif.cb.wb_we_i     <= 1'b1;
+    tcif.cb.wb_dat_i    <= 32'hDEAD_BEEF;
+    WaitNS(10);
+    tcif.cb.wb_cyc_i    <= 1'b0;
+    tcif.cb.wb_stb_i    <= 1'b0;
+    tcif.cb.wb_we_i     <= 1'b0;
+    WaitNS(100);
+  end
+  //==========================================================
+
   initial begin
     WaitNS(5000);
     ProcessCmdFile();
@@ -53,7 +82,7 @@ program testcase (  interface tcif  );
       if (tcif.cb.pkt_rx_avail) begin
         RxPacket();
         if (rx_count == tx_count) begin
-          $display("All packets received. Sumulation done!!!\n");
+          $display("All packets received. Simulation done!!!\n");
         end
       end
       @(posedge tcif.clk_156m25);
