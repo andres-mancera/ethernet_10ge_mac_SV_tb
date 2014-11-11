@@ -1,10 +1,11 @@
 interface xge_mac_interface (   input   clk_156m25,
                                 input   clk_xgmii_rx,
-                                input   clk_xgmii_tx    );
+                                input   clk_xgmii_tx,
+                                input   wb_clk_i        );
 
   logic         reset_156m25_n, reset_xgmii_rx_n, reset_xgmii_tx_n;
   logic         pkt_rx_ren, pkt_tx_eop, pkt_tx_sop, pkt_tx_val;
-  logic         wb_clk_i, wb_cyc_i, wb_rst_i, wb_stb_i, wb_we_i, wb_ack_o, wb_int_o;
+  logic         wb_cyc_i, wb_rst_i, wb_stb_i, wb_we_i, wb_ack_o, wb_int_o;
   logic         pkt_rx_avail, pkt_rx_eop, pkt_rx_err, pkt_rx_sop, pkt_rx_val, pkt_tx_full;
   logic [63:0]  pkt_tx_data, xgmii_rxd, pkt_rx_data, xgmii_txd;
   logic [31:0]  wb_dat_i, wb_dat_o;
@@ -41,7 +42,6 @@ interface xge_mac_interface (   input   clk_156m25,
     output  #1  reset_xgmii_rx_n;
     output  #1  reset_xgmii_tx_n;
     output  #1  wb_adr_i;
-    output  #1  wb_clk_i;
     output  #1  wb_cyc_i;
     output  #1  wb_dat_i;
     output  #1  wb_rst_i;
