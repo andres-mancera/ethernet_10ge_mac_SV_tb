@@ -1,0 +1,12 @@
+# VCS waveforms and compilation files #
+#######################################
+*.vpd
+*.log
+simv*
+ucli*
+csrc/
+DVEfiles/
+
+# VIM temporary files #
+#######################
+*.swp
