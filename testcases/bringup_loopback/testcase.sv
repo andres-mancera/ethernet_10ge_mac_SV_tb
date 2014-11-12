@@ -34,7 +34,7 @@ program testcase(interface tcif);
 
     // Connect packet handle from driver to testcase_packet
     env0.drv.xge_mac_pkt = testcase_packet;
-    num_packets = 10;
+    num_packets = $urandom_range(40,60);
     tcif.reset_dut();
     tcif.init_tb_signals();
     tcif.wait_ns(2000);
