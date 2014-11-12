@@ -13,6 +13,10 @@ program testcase(interface tcif);
         mac_src_addr    == 48'h1122_4455_7788;
         ether_type      == 16'h0800;    // IPv4
         payload.size()  inside {[46:50]};
+        foreach( payload[j] )
+        {
+          payload[j]    == j;
+        }
         ipg             == 10;
       }
   endclass : bringup_packet
