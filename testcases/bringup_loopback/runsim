@@ -4,4 +4,5 @@ vcs -full64 +vcs+lic+wait -sverilog -R -l vcs.log +vcs+vcdpluson -debug_pp \
 ../../rtl/verilog/*.v                   \
 ../../testbench/xge_mac_interface.sv    \
 ../../testbench/testbench.sv            \
-testcase.sv
+testcase.sv                             \
++ntb_random_seed_automatic
