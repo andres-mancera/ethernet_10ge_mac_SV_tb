@@ -34,7 +34,12 @@ class packet;
 
   // ======== Class methods ========
   function void print();
-    // FIXME: Implement this function. 
+    $display("PACKET :: t=%2t, pkt_id=%0d, mac_dst_addr=%h, mac_src_addr=%h, ether_type=%h, payload size=%0d",
+              $time, pkt_id, mac_dst_addr, mac_src_addr, ether_type, payload.size());
+    //for ( int i=0; i<payload.size(); i++ ) begin
+    //  $display("PACKET :: t=%2t, pkt_id=%0d, payload[%0d]=%h", 
+    //            $time, pkt_id, i, payload[i]);
+    //end
   endfunction : print
 
   static function increase_pktid();
