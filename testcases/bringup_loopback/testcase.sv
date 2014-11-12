@@ -7,12 +7,15 @@ program testcase(interface tcif);
   // Since this is a bringup test, all the fields of the
   // packet will be heavily constrained
   class bringup_packet extends packet;
+    constraint C_payload_size
+      {
+        payload.size()  inside {[45:54]};
+      }
     constraint C_bringup_packet
       {
         mac_dst_addr    == 48'hAABB_CCDD_EEFF;
-        mac_src_addr    == 48'h1122_4455_7788;
-        ether_type      == 16'h0800;    // IPv4
-        payload.size()  inside {[46:50]};
+        mac_src_addr    == 48'h1122_3344_5566;
+        ether_type      == 16'h88DD;    // IPv6
         foreach( payload[j] )
         {
           payload[j]    == j;
@@ -31,13 +34,14 @@ program testcase(interface tcif);
 
     // Connect packet handle from driver to testcase_packet
     env0.drv.xge_mac_pkt = testcase_packet;
-    num_packets = 2;
+    num_packets = 10;
     tcif.reset_dut();
     tcif.init_tb_signals();
-    tcif.wait_ns(5000);
+    tcif.wait_ns(2000);
     env0.run(num_packets);
-
-    #1000 $finish;
+    tcif.wait_ns(10000);
+    $finish;
+    //#1000 $finish;
   end
 
   final begin
