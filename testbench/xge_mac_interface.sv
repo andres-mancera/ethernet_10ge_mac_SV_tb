@@ -54,4 +54,35 @@ interface xge_mac_interface (   input   clk_156m25,
   // modport to connect to the testcase
   modport testcase_port ( clocking cb );
 
+
+  // task to wait a given number of nanoseconds
+  task wait_ns(input [31:0] delay);
+    #(1000*delay);
+  endtask : wait_ns
+
+  // task to assert all the reset signals at the beginning
+  // of the test in order to initialize the DUT.
+  task reset_dut();
+    reset_156m25_n      <= 1'b0;
+    reset_xgmii_rx_n    <= 1'b0;
+    reset_xgmii_tx_n    <= 1'b0;
+    wb_rst_i            <= 1'b1;
+    wait_ns(20);
+    reset_156m25_n      <= 1'b1;
+    reset_xgmii_rx_n    <= 1'b1;
+    reset_xgmii_tx_n    <= 1'b1;
+    wb_rst_i            <= 1'b0;
+  endtask : reset_dut 
+
+  // task to drive all the DUT input signals to some 
+  // appropriate value after the DUT comes out of reset
+  task init_tb_signals();
+    pkt_rx_ren      <= 1'b0;
+    pkt_tx_data     <= 64'b0;
+    pkt_tx_val      <= 1'b0;
+    pkt_tx_sop      <= 1'b0;
+    pkt_tx_eop      <= 1'b0;
+    pkt_tx_mod      <= 3'b0;
+  endtask : init_tb_signals
+
 endinterface : xge_mac_interface
