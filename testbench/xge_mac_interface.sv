@@ -78,11 +78,11 @@ interface xge_mac_interface (   input   clk_156m25,
   // appropriate value after the DUT comes out of reset
   task init_tb_signals();
     pkt_rx_ren      <= 1'b0;
-    pkt_tx_data     <= 64'b0;
+    pkt_tx_data     <= { $urandom, $urandom_range(0,65535) };
     pkt_tx_val      <= 1'b0;
     pkt_tx_sop      <= 1'b0;
     pkt_tx_eop      <= 1'b0;
-    pkt_tx_mod      <= 3'b0;
+    pkt_tx_mod      <= $urandom_range(0,7);
   endtask : init_tb_signals
 
 endinterface : xge_mac_interface
