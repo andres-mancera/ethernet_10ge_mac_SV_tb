@@ -1,12 +1,27 @@
-# VCS waveforms and compilation files #
-#######################################
+# Waveforms
 *.vpd
-*.log
-simv*
-ucli*
-csrc/
-DVEfiles/
+*.vcd
+*.evcd
 
-# VIM temporary files #
-#######################
+# Binary files
+simv
+
+# Directories used for compilation
+csrc/
+simv.daidir/
+
+# Log files
+*.log
+
+# DVE, UCLI related files
+DVEfiles/
+ucli*
+*.key
+
+# Coverage related files
+simv.vdb/
+urgReport/
+
+# Editor backup files
 *.swp
+*~
