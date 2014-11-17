@@ -1,11 +1,14 @@
 interface xge_mac_interface (   input   clk_156m25,
                                 input   clk_xgmii_rx,
                                 input   clk_xgmii_tx,
-                                input   wb_clk_i        );
+                                input   wb_clk_i,
+                                input   reset_156m25_n,
+                                input   reset_xgmii_rx_n,
+                                input   reset_xgmii_tx_n,
+                                input   wb_rst_i            );
 
-  logic         reset_156m25_n, reset_xgmii_rx_n, reset_xgmii_tx_n;
   logic         pkt_rx_ren, pkt_tx_eop, pkt_tx_sop, pkt_tx_val;
-  logic         wb_cyc_i, wb_rst_i, wb_stb_i, wb_we_i, wb_ack_o, wb_int_o;
+  logic         wb_cyc_i, wb_stb_i, wb_we_i, wb_ack_o, wb_int_o;
   logic         pkt_rx_avail, pkt_rx_eop, pkt_rx_err, pkt_rx_sop, pkt_rx_val, pkt_tx_full;
   logic [63:0]  pkt_tx_data, xgmii_rxd, pkt_rx_data, xgmii_txd;
   logic [31:0]  wb_dat_i, wb_dat_o;
@@ -38,13 +41,9 @@ interface xge_mac_interface (   input   clk_156m25,
     output  #1  pkt_tx_mod;
     output  #1  pkt_tx_sop;
     output  #1  pkt_tx_val;
-    output  #1  reset_156m25_n;
-    output  #1  reset_xgmii_rx_n;
-    output  #1  reset_xgmii_tx_n;
     output  #1  wb_adr_i;
     output  #1  wb_cyc_i;
     output  #1  wb_dat_i;
-    output  #1  wb_rst_i;
     output  #1  wb_stb_i;
     output  #1  wb_we_i;
     output  #1  xgmii_rxc;
@@ -60,20 +59,6 @@ interface xge_mac_interface (   input   clk_156m25,
     #(1000*delay);
   endtask : wait_ns
 
-  // task to assert all the reset signals at the beginning
-  // of the test in order to initialize the DUT.
-  task reset_dut();
-    reset_156m25_n      <= 1'b0;
-    reset_xgmii_rx_n    <= 1'b0;
-    reset_xgmii_tx_n    <= 1'b0;
-    wb_rst_i            <= 1'b1;
-    wait_ns(20);
-    reset_156m25_n      <= 1'b1;
-    reset_xgmii_rx_n    <= 1'b1;
-    reset_xgmii_tx_n    <= 1'b1;
-    wb_rst_i            <= 1'b0;
-  endtask : reset_dut 
-
   // task to drive all the DUT input signals to some 
   // appropriate value after the DUT comes out of reset
   task init_tb_signals();
@@ -83,6 +68,11 @@ interface xge_mac_interface (   input   clk_156m25,
     pkt_tx_sop      <= 1'b0;
     pkt_tx_eop      <= 1'b0;
     pkt_tx_mod      <= $urandom_range(0,7);
+    wb_adr_i        <= $urandom_range(0,255);    // FIXME: Drive the signals below
+    wb_cyc_i        <= 1'b0;
+    wb_dat_i        <= $urandom;
+    wb_stb_i        <= 1'b0;
+    wb_we_i         <= $urandom_range(0,1);
   endtask : init_tb_signals
 
 endinterface : xge_mac_interface
