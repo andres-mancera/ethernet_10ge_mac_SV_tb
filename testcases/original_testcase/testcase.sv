@@ -17,19 +17,6 @@ program testcase (  interface tcif  );
     tcif.cb.wb_we_i     <= 1'b0;
   end
 
-  // Reset generation
-  initial begin
-    tcif.cb.reset_156m25_n   <= 1'b0;
-    tcif.cb.reset_xgmii_rx_n <= 1'b0;
-    tcif.cb.reset_xgmii_tx_n <= 1'b0;
-    tcif.cb.wb_rst_i         <= 1'b1;
-    WaitNS(20);
-    tcif.cb.reset_156m25_n   <= 1'b1;
-    tcif.cb.reset_xgmii_rx_n <= 1'b1;
-    tcif.cb.reset_xgmii_tx_n <= 1'b1;
-    tcif.cb.wb_rst_i         <= 1'b0;
-  end
-
   // Init signals
   initial begin
     for (tx_length = 0; tx_length <= 1000; tx_length = tx_length + 1) begin
