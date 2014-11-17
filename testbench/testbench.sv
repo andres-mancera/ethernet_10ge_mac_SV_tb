@@ -37,12 +37,30 @@ module testbench();
     end
   end
 
+  // Generate the reset signals
+  initial begin
+    reset_156m25_n      = 1'b0;
+    reset_xgmii_rx_n    = 1'b0;
+    reset_xgmii_tx_n    = 1'b0;
+    wb_rst_i            = 1'b1;
+    #20000;
+    reset_156m25_n      <= 1'b1;
+    reset_xgmii_rx_n    <= 1'b1;
+    reset_xgmii_tx_n    <= 1'b1;
+    wb_rst_i            <= 1'b0;
+  end
+
+
   // xge_mac_interface intantiated here
   xge_mac_interface     xge_mac_if  (   
-                                        .clk_156m25     (clk_156m25),
-                                        .clk_xgmii_rx   (clk_xgmii_rx),
-                                        .clk_xgmii_tx   (clk_xgmii_tx),
-                                        .wb_clk_i       (wb_clk_i)
+                                        .clk_156m25         (clk_156m25),
+                                        .clk_xgmii_rx       (clk_xgmii_rx),
+                                        .clk_xgmii_tx       (clk_xgmii_tx),
+                                        .wb_clk_i           (wb_clk_i),
+                                        .reset_156m25_n     (reset_156m25_n),
+                                        .reset_xgmii_rx_n   (reset_xgmii_rx_n),
+                                        .reset_xgmii_tx_n   (reset_xgmii_tx_n),
+                                        .wb_rst_i           (wb_rst_i)
                                     );
 
   // DUT instantiated here
@@ -70,14 +88,14 @@ module testbench();
                             .pkt_tx_mod         (xge_mac_if.pkt_tx_mod),
                             .pkt_tx_sop         (xge_mac_if.pkt_tx_sop),
                             .pkt_tx_val         (xge_mac_if.pkt_tx_val),
-                            .reset_156m25_n     (xge_mac_if.reset_156m25_n),
-                            .reset_xgmii_rx_n   (xge_mac_if.reset_xgmii_rx_n),
-                            .reset_xgmii_tx_n   (xge_mac_if.reset_xgmii_tx_n),
+                            .reset_156m25_n     (reset_156m25_n),
+                            .reset_xgmii_rx_n   (reset_xgmii_rx_n),
+                            .reset_xgmii_tx_n   (reset_xgmii_tx_n),
                             .wb_adr_i           (xge_mac_if.wb_adr_i),
                             .wb_clk_i           (wb_clk_i),
                             .wb_cyc_i           (xge_mac_if.wb_cyc_i),
                             .wb_dat_i           (xge_mac_if.wb_dat_i),
-                            .wb_rst_i           (xge_mac_if.wb_rst_i),
+                            .wb_rst_i           (wb_rst_i),
                             .wb_stb_i           (xge_mac_if.wb_stb_i),
                             .wb_we_i            (xge_mac_if.wb_we_i),
                             // Following 2 connections are for loopback mode
