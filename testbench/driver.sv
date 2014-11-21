@@ -43,6 +43,7 @@ class driver;
       else if ( i==(num_of_flits-1) ) begin // ---------------- EOP cycle ----------------
         if ( num_of_flits==2 ) begin
           tx_data[63:16]    = { drv_pkt.mac_src_addr[31:0], drv_pkt.ether_type };
+          tx_data[15:0]     = $urandom_range(0,16'hFFFF);
           for ( int j=0; j<drv_pkt.payload.size(); j++ ) begin
             if ( j==0 ) begin
               tx_data[15:8] = drv_pkt.payload[0];
@@ -53,8 +54,13 @@ class driver;
           end
         end
         else begin
-          for ( int j=0; j<(((drv_pkt.payload.size()-3)%8)+1); j++ ) begin
-            tx_data         = tx_data | ( drv_pkt.payload[8*i+j-14] << (56-8*j) );
+          for ( int j=0; j<8; j++ ) begin
+            if (j<(((drv_pkt.payload.size()-3)%8)+1)) begin
+              tx_data       = tx_data | ( drv_pkt.payload[8*i+j-14] << (56-8*j) ); 
+            end
+            else begin
+              tx_data       = tx_data | ( $urandom_range(0,8'hFF) << (56-8*j) );
+            end
           end
         end
         drv_vi.cb.pkt_tx_val    <= 1'b1;
@@ -81,6 +87,8 @@ class driver;
       end                   // -------------------------------- MOP cycle ----------------
 
     end
+    drv_pkt.increase_pktid();
+    drv_pkt.print("FROM DRIVER");
     repeat ( drv_pkt.ipg ) begin
       @(drv_vi.cb);
       drv_vi.cb.pkt_tx_val    <= 1'b0;
@@ -89,9 +97,6 @@ class driver;
       drv_vi.cb.pkt_tx_mod    <= $urandom_range(0,7);
       drv_vi.cb.pkt_tx_data   <= { $urandom, $urandom_range(0,65535) };
     end
-
-    drv_pkt.increase_pktid();
-    drv_pkt.print();
   endtask : send_packet
 
 endclass
