@@ -22,7 +22,7 @@ program testcase (  interface tcif_driver,
         {
           payload[j]    == j+1;
         }
-        ipg             == 100;
+        ipg             == 10;
       }
   endclass : bringup_packet
 
@@ -36,7 +36,7 @@ program testcase (  interface tcif_driver,
 
     // Connect packet handle from driver to testcase_packet
     env0.drv.xge_mac_pkt = testcase_packet;
-    num_packets = 5;    //$urandom_range(40,60);
+    num_packets = $urandom_range(40,60);
     tcif_driver.init_tb_signals();
     tcif_driver.wait_ns(2000);
     env0.run(num_packets);
