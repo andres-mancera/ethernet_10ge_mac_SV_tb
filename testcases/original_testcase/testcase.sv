@@ -1,4 +1,5 @@
-program testcase (  interface tcif  );
+program testcase (  interface tcif_driver,
+                    interface tcif_monitor  );
 
   reg [7:0]     tx_buffer[0:10000];
   integer       tx_length;
@@ -10,11 +11,11 @@ program testcase (  interface tcif  );
     tx_count = 0;
     rx_count = 0;
     
-    tcif.cb.wb_adr_i    <= 8'b0;
-    tcif.cb.wb_cyc_i    <= 1'b0;
-    tcif.cb.wb_dat_i    <= 32'b0;
-    tcif.cb.wb_stb_i    <= 1'b0;
-    tcif.cb.wb_we_i     <= 1'b0;
+    tcif_driver.cb.wb_adr_i <= 8'b0;
+    tcif_driver.cb.wb_cyc_i <= 1'b0;
+    tcif_driver.cb.wb_dat_i <= 32'b0;
+    tcif_driver.cb.wb_stb_i <= 1'b0;
+    tcif_driver.cb.wb_we_i  <= 1'b0;
   end
 
   // Init signals
@@ -22,12 +23,12 @@ program testcase (  interface tcif  );
     for (tx_length = 0; tx_length <= 1000; tx_length = tx_length + 1) begin
       tx_buffer[tx_length] = 0;
     end
-    tcif.cb.pkt_rx_ren <= 1'b0;
-    tcif.cb.pkt_tx_data <= 64'b0;
-    tcif.cb.pkt_tx_val <= 1'b0;
-    tcif.cb.pkt_tx_sop <= 1'b0;
-    tcif.cb.pkt_tx_eop <= 1'b0;
-    tcif.cb.pkt_tx_mod <= 3'b0;
+    tcif_driver.cb.pkt_rx_ren   <= 1'b0;
+    tcif_driver.cb.pkt_tx_data  <= 64'b0;
+    tcif_driver.cb.pkt_tx_val   <= 1'b0;
+    tcif_driver.cb.pkt_tx_sop   <= 1'b0;
+    tcif_driver.cb.pkt_tx_eop   <= 1'b0;
+    tcif_driver.cb.pkt_tx_mod   <= 3'b0;
   end
 
   //==========================================================
@@ -35,26 +36,26 @@ program testcase (  interface tcif  );
   initial begin
     WaitNS(1000);
     // Initial read to configuration register 0.
-    tcif.cb.wb_adr_i    <= 8'b0;
-    tcif.cb.wb_cyc_i    <= 1'b1;
-    tcif.cb.wb_stb_i    <= 1'b1;
+    tcif_driver.cb.wb_adr_i     <= 8'b0;
+    tcif_driver.cb.wb_cyc_i     <= 1'b1;
+    tcif_driver.cb.wb_stb_i     <= 1'b1;
     WaitNS(10);
-    tcif.cb.wb_cyc_i    <= 1'b0;
-    tcif.cb.wb_stb_i    <= 1'b0;
+    tcif_driver.cb.wb_cyc_i     <= 1'b0;
+    tcif_driver.cb.wb_stb_i     <= 1'b0;
     WaitNS(100);
 
     // Write into configuration register 0 (Address 0x00).
     // As long as wb_dat_i[0]=1'b1, transmission will be enabled.
     // The remaining bits (wb_dat_i[31:1]) are don't care.
-    tcif.cb.wb_adr_i    <= 8'b0;
-    tcif.cb.wb_cyc_i    <= 1'b1;
-    tcif.cb.wb_stb_i    <= 1'b1;
-    tcif.cb.wb_we_i     <= 1'b1;
-    tcif.cb.wb_dat_i    <= 32'hDEAD_BEEF;
+    tcif_driver.cb.wb_adr_i     <= 8'b0;
+    tcif_driver.cb.wb_cyc_i     <= 1'b1;
+    tcif_driver.cb.wb_stb_i     <= 1'b1;
+    tcif_driver.cb.wb_we_i      <= 1'b1;
+    tcif_driver.cb.wb_dat_i     <= {$urandom_range(0, 31'h7FFF_FFF), 1'b1};
     WaitNS(10);
-    tcif.cb.wb_cyc_i    <= 1'b0;
-    tcif.cb.wb_stb_i    <= 1'b0;
-    tcif.cb.wb_we_i     <= 1'b0;
+    tcif_driver.cb.wb_cyc_i     <= 1'b0;
+    tcif_driver.cb.wb_stb_i     <= 1'b0;
+    tcif_driver.cb.wb_we_i      <= 1'b0;
     WaitNS(100);
   end
   //==========================================================
@@ -66,13 +67,13 @@ program testcase (  interface tcif  );
 
   initial begin
     forever begin
-      if (tcif.cb.pkt_rx_avail) begin
+      if (tcif_monitor.cb.pkt_rx_avail) begin
         RxPacket();
         if (rx_count == tx_count) begin
           $display("All packets received. Simulation done!!!\n");
         end
       end
-      @(posedge tcif.clk_156m25);
+      @(posedge tcif_monitor.clk_156m25);
     end
   end
 
@@ -89,32 +90,32 @@ program testcase (  interface tcif  );
     integer     i;
     begin
       $display("Transmit packet with length: %d", tx_length);
-      @(posedge tcif.clk_156m25);
+      @(posedge tcif_driver.clk_156m25);
       WaitNS(1);
-      tcif.cb.pkt_tx_val <= 1'b1;
+      tcif_driver.cb.pkt_tx_val <= 1'b1;
       for (i = 0; i < tx_length; i = i + 8) begin
-        tcif.cb.pkt_tx_sop <= 1'b0;
-        tcif.cb.pkt_tx_eop <= 1'b0;
-        tcif.cb.pkt_tx_mod <= 2'b0;
-        if (i == 0) tcif.cb.pkt_tx_sop <= 1'b1;
+        tcif_driver.cb.pkt_tx_sop <= 1'b0;
+        tcif_driver.cb.pkt_tx_eop <= 1'b0;
+        tcif_driver.cb.pkt_tx_mod <= 2'b0;
+        if (i == 0) tcif_driver.cb.pkt_tx_sop <= 1'b1;
         if (i + 8 >= tx_length) begin
-          tcif.cb.pkt_tx_eop <= 1'b1;
-          tcif.cb.pkt_tx_mod <= tx_length % 8;
+          tcif_driver.cb.pkt_tx_eop <= 1'b1;
+          tcif_driver.cb.pkt_tx_mod <= tx_length % 8;
         end
-        tcif.cb.pkt_tx_data[`LANE7] <= tx_buffer[i];
-        tcif.cb.pkt_tx_data[`LANE6] <= tx_buffer[i+1];
-        tcif.cb.pkt_tx_data[`LANE5] <= tx_buffer[i+2];
-        tcif.cb.pkt_tx_data[`LANE4] <= tx_buffer[i+3];
-        tcif.cb.pkt_tx_data[`LANE3] <= tx_buffer[i+4];
-        tcif.cb.pkt_tx_data[`LANE2] <= tx_buffer[i+5];
-        tcif.cb.pkt_tx_data[`LANE1] <= tx_buffer[i+6];
-        tcif.cb.pkt_tx_data[`LANE0] <= tx_buffer[i+7];
-        @(posedge tcif.clk_156m25);
+        tcif_driver.cb.pkt_tx_data[`LANE7] <= tx_buffer[i];
+        tcif_driver.cb.pkt_tx_data[`LANE6] <= tx_buffer[i+1];
+        tcif_driver.cb.pkt_tx_data[`LANE5] <= tx_buffer[i+2];
+        tcif_driver.cb.pkt_tx_data[`LANE4] <= tx_buffer[i+3];
+        tcif_driver.cb.pkt_tx_data[`LANE3] <= tx_buffer[i+4];
+        tcif_driver.cb.pkt_tx_data[`LANE2] <= tx_buffer[i+5];
+        tcif_driver.cb.pkt_tx_data[`LANE1] <= tx_buffer[i+6];
+        tcif_driver.cb.pkt_tx_data[`LANE0] <= tx_buffer[i+7];
+        @(posedge tcif_driver.clk_156m25);
         WaitNS(1);
       end
-      tcif.cb.pkt_tx_val <= 1'b0;
-      tcif.cb.pkt_tx_eop <= 1'b0;
-      tcif.cb.pkt_tx_mod <= 3'b0;
+      tcif_driver.cb.pkt_tx_val <= 1'b0;
+      tcif_driver.cb.pkt_tx_eop <= 1'b0;
+      tcif_driver.cb.pkt_tx_mod <= 3'b0;
       tx_count = tx_count + 1;
     end
   endtask : TxPacket
@@ -165,25 +166,25 @@ program testcase (  interface tcif  );
     reg     done;
     begin
       done = 0;
-      tcif.cb.pkt_rx_ren <= 1'b1;
-      @(posedge tcif.clk_156m25);
+      tcif_monitor.cb.pkt_rx_ren <= 1'b1;
+      @(posedge tcif_monitor.clk_156m25);
       while (!done) begin
-        if (tcif.cb.pkt_rx_val) begin
-          if (tcif.cb.pkt_rx_sop) begin
+        if (tcif_monitor.cb.pkt_rx_val) begin
+          if (tcif_monitor.cb.pkt_rx_sop) begin
             $display("\n\n------------------------");
             $display("Received Packet");
             $display("------------------------");
           end
-          $display("%x", tcif.cb.pkt_rx_data);
-          if (tcif.cb.pkt_rx_eop) begin
+          $display("%x", tcif_monitor.cb.pkt_rx_data);
+          if (tcif_monitor.cb.pkt_rx_eop) begin
             done <= 1;
-            tcif.cb.pkt_rx_ren <= 1'b0;
+            tcif_monitor.cb.pkt_rx_ren <= 1'b0;
           end
-          if (tcif.cb.pkt_rx_eop) begin
+          if (tcif_monitor.cb.pkt_rx_eop) begin
             $display("------------------------\n\n");
           end
         end
-        @(posedge tcif.clk_156m25);
+        @(posedge tcif_monitor.clk_156m25);
       end
       rx_count = rx_count + 1;
     end
