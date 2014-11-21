@@ -106,6 +106,7 @@ module testbench();
                           );
 
   // Testcase instantiated here
-  testcase  itestcase (     xge_mac_if.testcase_port    );
+  testcase  itestcase (     xge_mac_if.testcase_port,
+                            xge_mac_if.testcase_port    );
 
 endmodule
