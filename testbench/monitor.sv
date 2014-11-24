@@ -2,11 +2,14 @@ class monitor;
 
   virtual xge_mac_interface     mon_vi;
   packet                        xge_mac_pkt;
+  mailbox                       mon2sb;
 
   // ======== Contructor ========
-  function new(input virtual xge_mac_interface vif);
+  function new( input virtual xge_mac_interface vif,
+                input mailbox mon2sb                );
     $display("MONITOR :: inside new() function");
     this.mon_vi = vif;
+    this.mon2sb = mon2sb;
     xge_mac_pkt = new();
   endfunction : new
 
@@ -75,6 +78,8 @@ class monitor;
               idx++;
             end
             mon_pkt.print("FROM MONITOR");
+            // Put the collected packet into the mailbox
+            mon2sb.put(mon_pkt);
             // -------------------------------- EOP cycle ----------------
           end
         end
