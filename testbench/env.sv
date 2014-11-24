@@ -2,6 +2,9 @@ class env;
 
   driver                        drv;
   monitor                       mon;
+  scoreboard                    scbd;
+  mailbox                       drv2scbd;
+  mailbox                       mon2scbd;
   virtual xge_mac_interface     drv_vi;
   virtual xge_mac_interface     mon_vi;
 
@@ -11,8 +14,11 @@ class env;
     $display("ENV :: inside new() function");
     this.drv_vi = dvif;
     this.mon_vi = mvif;
-    drv         = new(dvif);
-    mon         = new(mvif);
+    drv2scbd    = new();
+    mon2scbd    = new();
+    drv         = new(dvif, drv2scbd);
+    mon         = new(mvif, mon2scbd);
+    scbd        = new(drv2scbd, mon2scbd);
   endfunction : new
 
 
@@ -30,6 +36,10 @@ class env;
       // Monitor thread will collect the packets.
       begin
         mon.collect_packet();
+      end
+      // Scoreboard thread to make the comparison.
+      begin
+        scbd.compare(drv2scbd, mon2scbd);
       end
     join_none
 
