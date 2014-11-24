@@ -1,6 +1,7 @@
 `include "../../testbench/packet.sv"
 `include "../../testbench/driver.sv"
 `include "../../testbench/monitor.sv"
+`include "../../testbench/scoreboard.sv"
 `include "../../testbench/env.sv"
 
 program testcase (  interface tcif_driver,
