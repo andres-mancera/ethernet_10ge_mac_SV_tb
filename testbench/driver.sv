@@ -2,11 +2,14 @@ class driver;
 
   virtual xge_mac_interface     drv_vi;
   packet                        xge_mac_pkt;
+  mailbox                       drv2sb;
 
   // ======== Constructor ========
-  function new(input virtual xge_mac_interface vif);
+  function new( input virtual xge_mac_interface vif,
+                input mailbox drv2sb                );
     $display("DRIVER :: inside new() function");
     this.drv_vi = vif;
+    this.drv2sb = drv2sb;
     xge_mac_pkt = new();
   endfunction : new
 
@@ -89,6 +92,8 @@ class driver;
     end
     drv_pkt.increase_pktid();
     drv_pkt.print("FROM DRIVER");
+    // Put the packet into the mailbox
+    drv2sb.put(drv_pkt);
     repeat ( drv_pkt.ipg ) begin
       @(drv_vi.cb);
       drv_vi.cb.pkt_tx_val    <= 1'b0;
