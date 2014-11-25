@@ -10,8 +10,6 @@ program testcase (  interface tcif_driver,
   class oversize_packet extends packet;
     constraint C_payload_size
       {
-        // When payload size is less then 46B, the DUT is supposed
-        // to pad the packet to the minimum 64B required for Ethernet.
         payload.size()  inside {[1501:9000]};
       }
   endclass : oversize_packet
