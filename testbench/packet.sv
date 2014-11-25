@@ -10,6 +10,7 @@ class packet;
   // Signals unrelated to the RTL 
   rand bit              sop_mark;
   rand bit              eop_mark;
+  bit                   rx_error;
   static bit [31:0]     pkt_id;
 
   // ======== Constraints ========
@@ -23,9 +24,12 @@ class packet;
   }
 
   constraint C_ipg {
-    ipg inside {[10:1000]};
+    ipg inside {[10:50]};
   }
 
+  constraint C_rx_error {
+    rx_error == 0;
+  }
 
   // ======== Constructor ========
   function new(input packet myself=null);
@@ -35,8 +39,9 @@ class packet;
   // ======== Class methods ========
   function void print(string calling_class);
     int unsigned    Byte8_words;
-    $display("PACKET %s :: t=%2t, pkt_id=%0d, mac_dst_addr=%h, mac_src_addr=%h, ether_type=%h, payload_size=%0d",
-              calling_class, $time, pkt_id, mac_dst_addr, mac_src_addr, ether_type, payload.size());
+    $display("PACKET %s :: t=%2t, mac_dst_addr=%h, mac_src_addr=%h, ether_type=%h, payload_size=%0d, sop=%0d, eop=%0d",
+              calling_class, $time, mac_dst_addr, mac_src_addr, ether_type, 
+              payload.size(), sop_mark, eop_mark);
     if ( payload.size()>0 ) begin
       Byte8_words = payload.size()%8 ? payload.size()/8+1 : payload.size()/8;
       for ( int i=0; i<Byte8_words; i++ ) begin
