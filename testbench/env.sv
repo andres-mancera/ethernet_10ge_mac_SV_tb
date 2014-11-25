@@ -41,7 +41,7 @@ class env;
       begin
         scbd.compare(drv2scbd, mon2scbd);
       end
-    join_none
+    join_any
 
   endtask : run
 
