@@ -43,14 +43,20 @@ program testcase (  interface tcif_driver,
     env0.run(num_packets);
     tcif_driver.wait_ns(10000);
     $finish;
-    //#1000 $finish;
   end
 
   final begin
-    bit [15:0]  num_pkts;
-    num_pkts    = packet::get_pktid();
+    int unsigned    num_pkts;
+    int unsigned    num_errors;
+    num_pkts    =   packet::get_pktid();
+    num_errors  =   env0.scbd.num_of_mismatches;
     $display("\nTESTCASE: ----------------- End Of Simulation -----------------");
-    $display("TESTCASE: Number of packets sent :  %0d", num_pkts);
+    $display("TESTCASE: Number of packets sent       :  %0d", num_pkts);
+    $display("TESTCASE: Number of mismatched packets :  %0d", num_errors);
+    if ( num_errors==0 )
+      $display("TESTCASE: ---------------------- PASSED -----------------------\n");
+    else
+      $display("TESTCASE: ---------------------- FAILED -----------------------\n");
   end
 
 endprogram
