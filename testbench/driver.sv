@@ -93,7 +93,9 @@ class driver;
     drv_pkt.increase_pktid();
     drv_pkt.print("FROM DRIVER");
     // Put the packet into the mailbox
-    drv2sb.put(drv_pkt);
+    if ( drv_pkt.sop_mark ) begin
+      drv2sb.put(drv_pkt);
+    end
     repeat ( drv_pkt.ipg ) begin
       @(drv_vi.cb);
       drv_vi.cb.pkt_tx_val    <= 1'b0;
