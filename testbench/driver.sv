@@ -92,9 +92,13 @@ class driver;
       end
       drv_pkt.increase_pktid();
       drv_pkt.print("FROM DRIVER");
-      // Put the packet into the mailbox
-      if ( drv_pkt.sop_mark ) begin
+      // Put the packet into the mailbox only when the SOP/EOP
+      // signals have been correctly driven.
+      if ( drv_pkt.sop_mark && drv_pkt.eop_mark ) begin
         drv2sb.put(drv_pkt);
+      end
+      else begin
+        $display("DRIVER :: t=%2t, ERROR PACKET, WILL NOT SEND IT TO SCOREBOARD", $time);
       end
       repeat ( drv_pkt.ipg ) begin
         @(drv_vi.cb);
