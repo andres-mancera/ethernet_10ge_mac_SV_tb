@@ -7,8 +7,9 @@
 program testcase (  interface tcif_driver,
                     interface tcif_monitor  );
 
-  // Since this is a bringup test, all the fields of the
-  // packet will be heavily constrained
+  // Since this is a bringup test, all the fields of the packet will be 
+  // heavily constrained.  The payload size is also contrained to match 
+  // that of the rudimentary testcase that comes along with the design.
   class bringup_packet extends packet;
     constraint C_payload_size
       {
