@@ -1,6 +1,7 @@
 `include "../../testbench/packet.sv"
 `include "../../testbench/driver.sv"
 `include "../../testbench/monitor.sv"
+`include "../../testbench/coverage.sv"
 `include "../../testbench/scoreboard.sv"
 `include "../../testbench/env.sv"
 
