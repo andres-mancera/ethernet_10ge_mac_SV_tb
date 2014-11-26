@@ -29,9 +29,7 @@ class env;
     fork
       // Driver thread will send the packets.
       begin
-        for (int i=0; i<num_packets; i++) begin
-          drv.send_packet();
-        end
+        drv.send_packet(num_packets);
       end
       // Monitor thread will collect the packets.
       begin
