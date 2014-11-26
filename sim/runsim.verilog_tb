@@ -1,5 +1,7 @@
-vcs -full64 +vcs+lic+wait -sverilog -R -l vcs.log -debug_pp \
--override_timescale=1ps/1ps \
-../rtl/verilog/*.v \
-+incdir+../rtl/include \
-../testbench/verilog/tb_xge_mac.sv
+vcs -full64 +vcs+lic+wait -sverilog -R -l vcs.log +vcs+vcdpluson -debug_pp \
+-override_timescale=1ps/1ps             \
++incdir+../../rtl/include               \
+../../rtl/verilog/*.v                   \
+../../testbench/xge_mac_interface.sv    \
+../../testbench/testbench.sv            \
+testcase.sv
