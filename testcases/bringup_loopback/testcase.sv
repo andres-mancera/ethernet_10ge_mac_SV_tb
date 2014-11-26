@@ -42,7 +42,7 @@ program testcase (  interface tcif_driver,
     tcif_driver.init_tb_signals();
     tcif_driver.wait_ns(2000);
     env0.run(num_packets);
-    tcif_driver.wait_ns(10000);
+    tcif_driver.wait_ns(100000);
     $finish;
   end
 
