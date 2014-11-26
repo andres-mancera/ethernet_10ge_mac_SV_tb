@@ -4,6 +4,8 @@ class scoreboard;
   mailbox       rcv_from_mon;
   int unsigned  num_of_mismatches;
 
+  coverage      cov = new();
+
   // Constructor
   function new( input mailbox drv2sb, input mailbox mon2sb );
     $display("SCBD :: inside new() function");
@@ -38,6 +40,9 @@ class scoreboard;
       else begin
         $display("SCBD :: t=%2t, EXPECTED AND ACTUAL PACKETS MATCH", $time);
       end
+
+      // Collect coverage info based on the packet received from the driver
+      cov.collect_coverage(drv_pkt);
     end
 
   endtask : compare
