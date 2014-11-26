@@ -98,11 +98,8 @@ module testbench();
                             .wb_rst_i           (wb_rst_i),
                             .wb_stb_i           (xge_mac_if.wb_stb_i),
                             .wb_we_i            (xge_mac_if.wb_we_i),
-                            // Following 2 connections are for loopback mode
-                            // input 'xgmii_rxc' connected to output 'xgmii_txc'
-                            // input 'xgmii_rxd' connected to output 'xgmii_txd'
-                            .xgmii_rxc          (xge_mac_if.xgmii_txc),
-                            .xgmii_rxd          (xge_mac_if.xgmii_txd)
+                            .xgmii_rxc          (xge_mac_if.xgmii_rxc),
+                            .xgmii_rxd          (xge_mac_if.xgmii_rxd)
                           );
 
   // Testcase instantiated here
