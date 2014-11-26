@@ -31,6 +31,14 @@ program testcase (  interface tcif_driver,
     tcif_driver.cb.pkt_tx_mod   <= 3'b0;
   end
 
+  initial begin
+    forever begin
+      tcif_driver.cb.xgmii_rxc  <= tcif_driver.cb.xgmii_txc;
+      tcif_driver.cb.xgmii_rxd  <= tcif_driver.cb.xgmii_txd;
+      @(posedge tcif_monitor.clk_156m25);
+    end
+  end
+
   //==========================================================
   // Wishbone interface read/write
   initial begin

@@ -40,6 +40,7 @@ program testcase (  interface tcif_driver,
     env0.drv.xge_mac_pkt = testcase_packet;
     num_packets = $urandom_range(40,60);
     tcif_driver.init_tb_signals();
+    tcif_driver.make_loopback_connection();
     tcif_driver.wait_ns(2000);
     env0.run(num_packets);
     tcif_driver.wait_ns(100000);
