@@ -83,4 +83,26 @@ interface xge_mac_interface (   input   clk_156m25,
     assign  xgmii_rxd = xgmii_txd;
   endtask : make_loopback_connection
 
+
+  // ================================= Assertions
+  property no_two_consecutive_sop_without_eop;
+    @(cb) pkt_rx_sop |=> !pkt_rx_sop throughout pkt_rx_eop [->1];
+  endproperty
+  assert property ( no_two_consecutive_sop_without_eop ) 
+    else $error ("ASSERTION FAILED : Got 2 consecutive SOPs without EOP in between");
+
+  property no_two_consecutive_eop_without_sop;
+    @(cb) pkt_rx_eop |=> !pkt_rx_eop throughout pkt_rx_sop [->1];
+  endproperty
+  assert property ( no_two_consecutive_eop_without_sop )
+    else $error ("ASSERTION FAILED : Got 2 consecutive EOPs without SOP in between");
+
+  property data_never_not_unknown_on_valid;
+    @(cb) pkt_rx_val |-> not($isunknown(pkt_rx_data));
+  endproperty
+  assert property ( data_never_not_unknown_on_valid )
+    else $error ("ASSERTION FAILED : Packet RX Data is unknown when valid is asserted");
+  // ============================================
+
+
 endinterface : xge_mac_interface
