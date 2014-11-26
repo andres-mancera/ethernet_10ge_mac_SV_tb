@@ -75,4 +75,12 @@ interface xge_mac_interface (   input   clk_156m25,
     wb_we_i         <= $urandom_range(0,1);
   endtask : init_tb_signals
 
+  // task to configure the DUT in loopback mode
+  // input 'xgmii_rxc' connected to output 'xgmii_txc'
+  // input 'xgmii_rxd' connected to output 'xgmii_txd'
+  task make_loopback_connection();
+    assign  xgmii_rxc = xgmii_txc;
+    assign  xgmii_rxd = xgmii_txd;
+  endtask : make_loopback_connection
+
 endinterface : xge_mac_interface
