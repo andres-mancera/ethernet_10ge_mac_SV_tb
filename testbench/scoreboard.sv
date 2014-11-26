@@ -19,44 +19,27 @@ class scoreboard;
     packet          drv_pkt;
     packet          mon_pkt;
     int unsigned    error;
-    bit             compare_performed;
 
     forever begin
       error             = 0;
-      compare_performed = 0;
 
-      fork
-        begin
-          // Get the packet from the driver through the mailbox.
-          rcv_from_drv.get(drv_pkt);
-          drv_pkt.print("SCBD EXPECTED");
-        end
-        begin
-          // Get the packet from the monitor through the mailbox.
-          rcv_from_mon.get(mon_pkt);
-          mon_pkt.print("SCBD ACTUAL");
-        end
-      join
+      // Get the packet from the driver through the mailbox.
+      rcv_from_drv.get(drv_pkt);
+      //drv_pkt.print("SCBD EXPECTED");
 
-      if ( drv_pkt.sop_mark && drv_pkt.eop_mark && !mon_pkt.rx_error ) begin
-        error = compare_driver_and__monitor_packets(drv_pkt, mon_pkt);
-        compare_performed = 1;
-      end
-      else if ( !mon_pkt.rx_error ) begin
-        error = compare_driver_and__monitor_packets(drv_pkt, mon_pkt);
-        compare_performed = 1;
-      end
+      // Get the packet from the monitor through the mailbox.
+      rcv_from_mon.get(mon_pkt);
+      //mon_pkt.print("SCBD ACTUAL");
 
-      if ( error && compare_performed ) begin
+      error = compare_driver_and__monitor_packets(drv_pkt, mon_pkt);
+      if ( error ) begin
         num_of_mismatches++;
       end
-      else if ( !error && compare_performed ) begin
+      else begin
         $display("SCBD :: t=%2t, EXPECTED AND ACTUAL PACKETS MATCH", $time);
       end
-      else begin
-        $display("SCBD :: t=%2t, EXPECTED/ACTUAL PACKET CONTAIN ERRORS - CANNOT COMPARE THEM", $time);
-      end
     end
+
   endtask : compare
 
 
