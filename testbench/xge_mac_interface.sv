@@ -68,7 +68,7 @@ interface xge_mac_interface (   input   clk_156m25,
     pkt_tx_sop      <= 1'b0;
     pkt_tx_eop      <= 1'b0;
     pkt_tx_mod      <= $urandom_range(0,7);
-    wb_adr_i        <= $urandom_range(0,255);    // FIXME: Drive the signals below
+    wb_adr_i        <= $urandom_range(0,255);
     wb_cyc_i        <= 1'b0;
     wb_dat_i        <= $urandom;
     wb_stb_i        <= 1'b0;
