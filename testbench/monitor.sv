@@ -119,8 +119,13 @@ class monitor;
           end
           if ( packet_captured ) begin
             mon_pkt.print("FROM MONITOR");
-            // Put the collected packet into the mailbox
-            mon2sb.put(mon_pkt);
+            // Put the collected packet into the mailbox if the packet has no errors
+            if ( !err_in_packet && mon_pkt.sop_mark && mon_pkt.eop_mark ) begin
+              mon2sb.put(mon_pkt);
+            end
+            else begin
+              $display("MONITOR :: t=%2t, ERROR PACKET, WILL NOT SEND IT TO SCOREBOARD", $time);
+            end
             packet_captured = 0;
           end
         end
