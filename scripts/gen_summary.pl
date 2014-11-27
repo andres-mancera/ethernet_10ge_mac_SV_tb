@@ -1,19 +1,15 @@
 #!/bin/perl
 
-printf ("\n");
-printf ("=============================\n");
-printf ("Generating Regression Summary\n");
-printf ("=============================\n\n");
-
 my @logfiles = `find ../ -name vcs.log`;
 my $logcount = $#logfiles+1;
 if ( $logcount==0 ) {
   die "Cannot find VCS log files, report cannot be generated!\n";
 }
 my $pass_total, $fail_total, $other_total, $test_total = 0;
+my @results_array;
 
-foreach my $logfile (@logfiles){
-  my $pass = `egrep \"TESTCASE:.*PASSED\" $logfile`; 
+foreach my $logfile (@logfiles) {
+  my $pass = `egrep \"TESTCASE:.*PASSED\" $logfile`;
   my $fail = `egrep \"TESTCASE:.*FAILED|ASSERTION FAILED\" $logfile`;
   my $seed = `egrep \"automatic random seed used\" $logfile`;
   my $test_seed;
@@ -24,13 +20,13 @@ foreach my $logfile (@logfiles){
     $test_seed = "unknown";
   }
   if($pass){
-    print ("  PASSED  (Seed=$test_seed)\t ==>   $logfile");
+    push (@results_array, "  PASSED  (Seed=$test_seed)\t ==>   $logfile");
     $pass_total++;
   } elsif ($fail){
-    print ("  FAILED  (Seed=$test_seed)\t ==>   $logfile");
+    push (@results_array, "  FAILED  (Seed=$test_seed)\t ==>   $logfile");
     $fail_total++;
   } else {
-    print ("  UNKNOWN (Seed=$test_seed)\t ==>   $logfile");
+    push (@results_array, "  UNKNOWN (Seed=$test_seed)\t ==>   $logfile");
     $other_total++;
   }
   $test_total++;
@@ -42,5 +38,17 @@ my $other_percent = ($other_total/$test_total)*100;
 
 printf ("\n");
 printf ("===============================================================================\n");
-printf ("REGRESSION SUMMARY => PASS: %d[%d\%], FAIL: %d[%d\%], UNKNOWN: %d[%d\%], TOTAL: %d\n", $pass_total, $pass_percent, $fail_total, $fail_percent, $other_total, $other_percent, $test_total);
-printf ("===============================================================================\n\n");
+printf ("                             REGRESSION SUMMARY\n");
+printf ("===============================================================================\n");
+printf ("      TESTCASES THAT PASSED         :  %d [%d\%]\n", $pass_total, $pass_percent);
+printf ("      TESTCASES THAT FAILED         :  %d [%d\%]\n", $fail_total, $fail_percent);
+printf ("      TESTCASES WITH UNKNOWN STATUS :  %d [%d\%]\n", $other_total, $other_percent);
+printf ("      TOTAL NUMBER OF TESTCASES     :  %d\n", $test_total);
+printf ("===============================================================================\n");
+printf ("\n");
+foreach (@results_array) {
+  print ($_);
+}
+printf ("\n");
+printf ("===============================================================================\n");
+printf ("\n");
