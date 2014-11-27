@@ -8,10 +8,10 @@ if ( $logcount==0 ) {
 my $pass_total, $fail_total, $other_total, $test_total = 0;
 my @results_array;
 
-foreach my $logfile (@logfiles) {
-  my $pass = `egrep \"TESTCASE:.*PASSED\" $logfile`;
-  my $fail = `egrep \"TESTCASE:.*FAILED|ASSERTION FAILED\" $logfile`;
-  my $seed = `egrep \"automatic random seed used\" $logfile`;
+foreach (@logfiles) {
+  my $pass = `egrep \"TESTCASE:.*PASSED\" $_`;
+  my $fail = `egrep \"TESTCASE:.*FAILED|ASSERTION FAILED\" $_`;
+  my $seed = `egrep \"automatic random seed used\" $_`;
   my $test_seed;
   if ( $seed =~ /NOTE: automatic random seed used:\s*(\d+)/ ) {
     $test_seed = $1;
@@ -20,13 +20,13 @@ foreach my $logfile (@logfiles) {
     $test_seed = "unknown";
   }
   if($pass){
-    push (@results_array, "  PASSED  (Seed=$test_seed)\t ==>   $logfile");
+    push (@results_array, "  PASSED  (Seed=$test_seed)\t ==>   $_");
     $pass_total++;
   } elsif ($fail){
-    push (@results_array, "  FAILED  (Seed=$test_seed)\t ==>   $logfile");
+    push (@results_array, "  FAILED  (Seed=$test_seed)\t ==>   $_");
     $fail_total++;
   } else {
-    push (@results_array, "  UNKNOWN (Seed=$test_seed)\t ==>   $logfile");
+    push (@results_array, "  UNKNOWN (Seed=$test_seed)\t ==>   $_");
     $other_total++;
   }
   $test_total++;
