@@ -1,3 +1,11 @@
+//////////////////////////////////////////////////////////////////////
+//                                                                  //
+//  File name : zero_ipg_packet/testcase.sv                         //
+//  Author    : G. Andres Mancera                                   //
+//  License   : GNU Lesser General Public License                   //
+//                                                                  //
+//////////////////////////////////////////////////////////////////////
+
 `include "../../testbench/packet.sv"
 `include "../../testbench/driver.sv"
 `include "../../testbench/monitor.sv"
