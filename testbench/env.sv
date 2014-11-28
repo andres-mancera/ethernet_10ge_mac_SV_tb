@@ -1,3 +1,11 @@
+//////////////////////////////////////////////////////////////////////
+//                                                                  //
+//  File name : env.sv                                              //
+//  Author    : G. Andres Mancera                                   //
+//  License   : GNU Lesser General Public License                   //
+//                                                                  //
+//////////////////////////////////////////////////////////////////////
+
 class env;
 
   driver                        drv;

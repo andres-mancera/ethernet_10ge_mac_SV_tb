@@ -1,3 +1,11 @@
+//////////////////////////////////////////////////////////////////////
+//                                                                  //
+//  File name : driver.sv                                           //
+//  Author    : G. Andres Mancera                                   //
+//  License   : GNU Lesser General Public License                   //
+//                                                                  //
+//////////////////////////////////////////////////////////////////////
+
 class driver;
 
   virtual xge_mac_interface     drv_vi;

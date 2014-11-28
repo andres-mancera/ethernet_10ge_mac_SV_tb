@@ -1,3 +1,11 @@
+//////////////////////////////////////////////////////////////////////
+//                                                                  //
+//  File name : coverage.sv                                         //
+//  Author    : G. Andres Mancera                                   //
+//  License   : GNU Lesser General Public License                   //
+//                                                                  //
+//////////////////////////////////////////////////////////////////////
+
 class coverage;
 
   packet    cov_packet;

@@ -1,3 +1,11 @@
+//////////////////////////////////////////////////////////////////////
+//                                                                  //
+//  File name : scoreboard.sv                                       //
+//  Author    : G. Andres Mancera                                   //
+//  License   : GNU Lesser General Public License                   //
+//                                                                  //
+//////////////////////////////////////////////////////////////////////
+
 class scoreboard;
 
   mailbox       rcv_from_drv;

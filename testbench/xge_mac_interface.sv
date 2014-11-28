@@ -1,3 +1,11 @@
+//////////////////////////////////////////////////////////////////////
+//                                                                  //
+//  File name : xge_mac_interface.sv                                //
+//  Author    : G. Andres Mancera                                   //
+//  License   : GNU Lesser General Public License                   //
+//                                                                  //
+//////////////////////////////////////////////////////////////////////
+
 interface xge_mac_interface (   input   clk_156m25,
                                 input   clk_xgmii_rx,
                                 input   clk_xgmii_tx,
