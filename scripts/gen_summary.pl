@@ -1,4 +1,12 @@
 #!/bin/perl
+##////////////////////////////////////////////////////////////////////
+##                                                                  //
+##  File name : gen_summary.pl                                      //
+##  Author    : G. Andres Mancera                                   //
+##  License   : GNU Lesser General Public License                   //
+##                                                                  //
+##////////////////////////////////////////////////////////////////////
+
 
 my @logfiles = `find ../ -name vcs.log`;
 my $logcount = $#logfiles+1;
