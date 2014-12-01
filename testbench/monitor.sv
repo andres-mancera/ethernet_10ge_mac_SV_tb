@@ -100,12 +100,6 @@ class monitor;
               idx++;
             end
             packet_captured  = 1;
-            mon_pkt.rx_error = err_in_packet;
-            //mon_pkt.print("FROM MONITOR");
-            //if ( !err_in_packet ) begin
-            //  // Put the collected packet into the mailbox
-            //  mon2sb.put(mon_pkt);
-            //end
             // -------------------------------- EOP cycle ----------------
           end
           if ( mon_vi.cb.pkt_rx_sop && mon_vi.cb.pkt_rx_eop && pkt_in_progress==0) begin
@@ -123,7 +117,6 @@ class monitor;
               rx_data_q.pop_front();
             end
             packet_captured = 1;
-            mon_pkt.rx_error = err_in_packet;
             // -------------------------------- SOP/EOP cycle ------------
           end
           if ( packet_captured ) begin
