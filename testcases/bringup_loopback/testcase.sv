@@ -51,9 +51,14 @@ program testcase (  interface tcif_driver,
     num_packets = $urandom_range(40,60);
     tcif_driver.init_tb_signals();
     tcif_driver.make_loopback_connection();
+    tcif_driver.wishbone_write_task();
     tcif_driver.wait_ns(2000);
     env0.run(num_packets);
     tcif_driver.wait_ns(100000);
+    tcif_driver.wishbone_read_task(8'h00);
+    tcif_driver.wishbone_read_task(8'h08);
+    tcif_driver.wishbone_read_task(8'h0C);
+    tcif_driver.wishbone_read_task(8'h10);
     $finish;
   end
 
