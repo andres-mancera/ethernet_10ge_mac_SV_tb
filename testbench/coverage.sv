@@ -12,6 +12,7 @@ class coverage;
   packet    cov_packet;
 
   covergroup cov_packet_cg;
+    option.name = "Covergroup for all the packet fields";
     mac_dst_addr : coverpoint cov_packet.mac_dst_addr
                     {
                         bins ucast_dst_addr = { [48'h0:48'hFFFFFFFFFF] };
@@ -42,7 +43,10 @@ class coverage;
                     }
     ipg          : coverpoint cov_packet.ipg
                     {
-                        option.auto_bin_max = 8;    // Automatically create 8 bins
+                        bins zero_ipg_delay     = { 0 };
+                        bins short_ipg_delay    = { [1:10] };
+                        bins medim_ipg_delay    = { [11:45] };
+                        bins large_ipg_delay    = { [46:$] };
                     }
   endgroup
 
