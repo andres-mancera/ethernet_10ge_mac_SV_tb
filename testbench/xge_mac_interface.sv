@@ -92,6 +92,46 @@ interface xge_mac_interface (   input   clk_156m25,
     assign  xgmii_rxd = xgmii_txd;
   endtask : make_loopback_connection
 
+  // task to write into the DUT configuration register 0.
+  // This task will write 32'h1 so that the "TX enable" bit,
+  // hence enabling the transmission of frames.
+  task wishbone_write_task();
+    ##50;
+    wb_adr_i    <= 8'b0;    // Config register 0 (Address 0x00).
+    wb_cyc_i    <= 1'b1;
+    wb_stb_i    <= 1'b1;
+    wb_we_i     <= 1'b1;
+    wb_dat_i    <= 32'h1;
+    ##2;
+    wb_adr_i    <= $urandom_range(0,255);
+    wb_cyc_i    <= 1'b0;
+    wb_stb_i    <= 1'b0;
+    wb_we_i     <= 1'b0;
+    wb_dat_i    <= $urandom;
+    ##10;
+  endtask : wishbone_write_task
+
+  // task to read from the DUT registers.  The address to read
+  // from is passed as an argument while invoking this task.
+  // Configuration register 0   : Address 0x00
+  // Interrupt Pending Register : Address 0x08
+  // Interrupt Status Register  : Address 0x0C
+  // Interrupt Mask Register    : Address 0x010
+  task wishbone_read_task(bit[7:0] read_addr);
+    assert ( read_addr==8'h00 || read_addr==8'h08 ||
+             read_addr==8'h0C || read_addr==8'h10   );
+    wb_adr_i    <= read_addr;
+    wb_cyc_i    <= 1'b1;
+    wb_stb_i    <= 1'b1;
+    wb_dat_i    <= $urandom;
+    ##2;
+    wb_adr_i    <= $urandom_range(0,255);
+    wb_cyc_i    <= 1'b0;
+    wb_stb_i    <= 1'b0;
+    wb_dat_i    <= $urandom;
+    ##10;
+  endtask : wishbone_read_task
+
 
   // ================================= Assertions
   property no_two_consecutive_sop_without_eop;
