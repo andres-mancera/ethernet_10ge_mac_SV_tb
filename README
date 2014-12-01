@@ -40,4 +40,5 @@ has been also added to the verification plan.
   wired from the top level.  This allows the testbench to configure the design
   during the initialization phase and to read from the status registers at the 
   end of the test.  The tasks that perform these operations are also part of
-  the interface file.
+  the interface file.  Those tasks are then called from the testcases, as
+  shown in testcases/bringup_loopback/testcase.sv
