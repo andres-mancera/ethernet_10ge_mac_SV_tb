@@ -1,3 +1,12 @@
+//////////////////////////////////////////////////////////////////////
+//                                                                  //
+//  File name : packet.sv                                           //
+//  Author    : G. Andres Mancera                                   //
+//  Course    : Advanced Verification with SystemVerilog OOP        //
+//              Testbench - UCSC Silicon Valley Extension           //
+//                                                                  //
+//////////////////////////////////////////////////////////////////////
+
 class packet;
 
   // Signals to be driven into the RTL
@@ -10,7 +19,6 @@ class packet;
   // Signals unrelated to the RTL 
   rand bit              sop_mark;
   rand bit              eop_mark;
-  bit                   rx_error;
   static bit [31:0]     pkt_id;
 
   // ======== Constraints ========
@@ -27,9 +35,6 @@ class packet;
     ipg inside {[10:50]};
   }
 
-  constraint C_rx_error {
-    rx_error == 0;
-  }
 
   // ======== Constructor ========
   function new(input packet myself=null);
@@ -94,6 +99,38 @@ class packet;
       end
     end
   endfunction : print
+
+  function set_mac_dst_addr(bit [47:0] mac_dst_addr);
+    this.mac_dst_addr = mac_dst_addr;
+  endfunction : set_mac_dst_addr
+
+  function bit [47:0] get_mac_dst_addr();
+    return this.mac_dst_addr;
+  endfunction : get_mac_dst_addr
+
+  function set_mac_src_addr(bit [47:0] mac_src_addr);
+    this.mac_src_addr = mac_src_addr;
+  endfunction : set_mac_src_addr
+
+  function bit [47:0] get_mac_src_addr();
+    return this.mac_src_addr;
+  endfunction : get_mac_src_addr
+
+  function bit set_ether_type (bit [15:0] ether_type);
+    this.ether_type = ether_type;
+  endfunction : set_ether_type
+
+  function bit [15:0] get_ether_type();
+    return this.ether_type;
+  endfunction : get_ether_type
+
+  function set_ipg(bit [31:0] ipg);
+    this.ipg = ipg;
+  endfunction : set_ipg
+
+  function bit [31:0] get_ipg();
+    return this.ipg;
+  endfunction : get_ipg
 
   static function increase_pktid();
     pkt_id++;
