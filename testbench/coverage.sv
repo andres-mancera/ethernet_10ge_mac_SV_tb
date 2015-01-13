@@ -2,6 +2,7 @@
 //                                                                  //
 //  File name : coverage.sv                                         //
 //  Author    : G. Andres Mancera                                   //
+//  License   : GNU Lesser General Public License                   //
 //  Course    : Advanced Verification with SystemVerilog OOP        //
 //              Testbench - UCSC Silicon Valley Extension           //
 //                                                                  //

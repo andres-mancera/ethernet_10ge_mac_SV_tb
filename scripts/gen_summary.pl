@@ -3,6 +3,7 @@
 ##                                                                  //
 ##  File name : gen_summary.pl                                      //
 ##  Author    : G. Andres Mancera                                   //
+##  License   : GNU Lesser General Public License                   //
 ##  Course    : Advanced Verification with SystemVerilog OOP        //
 ##              Testbench - UCSC Silicon Valley Extension           //
 ##                                                                  //
