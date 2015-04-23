@@ -34,7 +34,7 @@ has been also added to the verification plan.
 =================================
 Here is a brief description of each one of the directories in this project:
  * doc/:  PDF verification plan (aka testplan).
- * rtl/:  Verilog source code for the D scripts  sim  testbench  testcases
+ * rtl/:  Verilog source code for the DUT.
  * scripts/:  Scripts required to run a regression.
  * sim/:  Generic runsim files with all the required VCS flags.
  * testbench/:  Source code for all the testbench components.
