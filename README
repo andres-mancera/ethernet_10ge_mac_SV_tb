@@ -1,14 +1,48 @@
 //////////////////////////////////////////////////////////////////////
 //                                                                  //                               
 //  Author    : G. Andres Mancera                                   //
+//  Project   : SystemVerilog Testbench for a 10GE MAC Core         //
 //  License   : GNU Lesser General Public License                   //
-//  Course    : Advanced Verification with SystemVerilog OOP        //
-//              Testbench - UCSC Silicon Valley Extension           //
 //                                                                  //
 //////////////////////////////////////////////////////////////////////
 
 =================================
-  HOW TO RUN A FULL REGRESSION?
+  EXECUTIVE SUMMARY
+=================================
+This is the source code of a fully-fledged SystemVerilog OOP verification
+environment.  The Design-Under-Test (DUT) is a 10GE MAC Core whose source 
+code is available under the LGPL license from OpenCores.org:
+  http://opencores.org/project,xge_mac
+
+This verification environment was developed as the final project of the 
+"Advanced Verification With SystemVerilog OOP Testbench" course at the
+UCSC Silicon Valley Extension.  For addiotional information, take a look 
+at the verification document available in the doc/ directory.
+
+
+=================================
+  VERIFICATION PLAN DOCUMENT
+=================================
+The verification plan is available in the doc/ directory.  This document
+describes the whole testbench environment and all its components in detail.
+An appendix that explains the 2 bugs that were found as part of this project
+has been also added to the verification plan.
+
+
+=================================
+  TESTBENCH'S FILE STRUCTURE
+=================================
+Here is a brief description of each one of the directories in this project:
+ * doc/:  PDF verification plan (aka testplan).
+ * rtl/:  Verilog source code for the D scripts  sim  testbench  testcases
+ * scripts/:  Scripts required to run a regression.
+ * sim/:  Generic runsim files with all the required VCS flags.
+ * testbench/:  Source code for all the testbench components.
+ * testcases/:  Test case files.
+
+
+=================================
+  HOW TO RUN A TEST/REGRESSION?
 =================================
 Go to the scripts/ directory and type "make".  This will display the Makefile
 usage.  You can choose to run all the test cases at once, or you can also run
@@ -18,15 +52,6 @@ and collect coverage information.
 If you choose to run a full regression, a perl script will be invoked by the
 Makefile in order to parse the log files and generate a report that contains
 test cases with a passing/failing/unknown log signature.
-
-
-=================================
-  VERIFICATION PLAN DOCUMENT   
-=================================
-The verification plan is available in the doc/ directory.  This document
-describes the whole testbench environment and all its components in detail.
-An appendix that explains the 2 bugs that were found as part of this project
-has been also added to the verification plan.
 
 
 =================================
