@@ -16,7 +16,7 @@ code is available under the LGPL license from OpenCores.org:
 
 This verification environment was developed as the final project of the 
 "Advanced Verification With SystemVerilog OOP Testbench" course at the
-UCSC Silicon Valley Extension.  For addiotional information, take a look 
+UCSC Silicon Valley Extension.  For additional information, take a look 
 at the verification document available in the doc/ directory.
 
 
